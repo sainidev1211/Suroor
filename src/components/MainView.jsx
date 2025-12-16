@@ -123,34 +123,7 @@ export function MainView({ view, setView, likedSongs, playlists, onPlay, current
         </div>
     );
 
-    // VIDEO PLAYER RENDERER (For News/Live)
-    const renderVideoPlayer = () => {
-        // If we have a current track and it IS a video, show the large player here
-        if (!currentTrack || !currentTrack.isVideo) {
-            return (
-                <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>
-                    <h3>Select a News Channel to Start Watching</h3>
-                    <p>Live News from India and the World</p>
-                </div>
-            );
-        }
-
-        const embedUrl = `https://www.youtube.com/embed/${currentTrack.id}?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1`;
-
-        return (
-            <div className="large-video-container" style={{ width: '100%', height: 'calc(100vh - 180px)', background: '#000', borderRadius: 12, overflow: 'hidden', position: 'relative' }}>
-                <iframe
-                    src={embedUrl}
-                    title={currentTrack.title}
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowFullScreen
-                />
-            </div>
-        );
-    };
+    // VIDEO PLAYER RENDERER REMOVED - Using FullScreenPlayer instead to prevent double audio
 
     // Determine Content
     let content;
@@ -203,24 +176,27 @@ export function MainView({ view, setView, likedSongs, playlists, onPlay, current
             </div>
         );
     } else if (view === 'news_india' || view === 'news_intl') {
-        // Special Layout for News
+        // Special Layout for News - List Only (Video opens in FullScreen)
         content = (
-            <div className="news-layout" style={{ display: 'flex', gap: 20, height: '100%' }}>
-                <div className="video-section" style={{ flex: 3 }}>
-                    {renderVideoPlayer()}
-                </div>
-                <div className="news-list" style={{ flex: 1, overflowY: 'auto', background: '#222', borderRadius: 12, padding: 10 }}>
-                    <h3 style={{ margin: '0 0 10px 0', fontSize: 16 }}>Live Channels</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div className="news-layout" style={{ height: '100%', padding: 20 }}>
+                <div className="news-list" style={{ maxWidth: 800, margin: '0 auto', background: '#222', borderRadius: 12, padding: 20 }}>
+                    <h3 style={{ margin: '0 0 20px 0', fontSize: 20, borderBottom: '1px solid #444', paddingBottom: 10 }}>
+                        {view === 'news_india' ? 'Live News India' : 'World News Live'}
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                         {tracks.map(track => (
                             <div key={track.id} onClick={() => onPlay({ ...track, isVideo: true })} style={{
-                                display: 'flex', gap: 10, cursor: 'pointer', padding: 8,
-                                background: currentTrack?.id === track.id ? '#333' : 'transparent', borderRadius: 6
+                                display: 'flex', gap: 16, cursor: 'pointer', padding: 12,
+                                background: currentTrack?.id === track.id ? '#333' : 'rgba(255,255,255,0.05)', borderRadius: 8,
+                                alignItems: 'center', transition: 'background 0.2s'
                             }}>
-                                <img src={track.cover} style={{ width: 80, height: 45, objectFit: 'cover', borderRadius: 4 }} alt="" />
-                                <div style={{ fontSize: 13 }}>
-                                    <div style={{ fontWeight: 600, color: 'white', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{track.title}</div>
-                                    <div style={{ color: '#aaa', fontSize: 11 }}>{track.artist}</div>
+                                <img src={track.cover} style={{ width: 120, height: 68, objectFit: 'cover', borderRadius: 4 }} alt="" />
+                                <div>
+                                    <div style={{ fontWeight: 600, color: 'white', fontSize: 16 }}>{track.title}</div>
+                                    <div style={{ color: '#aaa', fontSize: 13, marginTop: 4 }}>{track.artist} • Live</div>
+                                </div>
+                                <div style={{ marginLeft: 'auto' }}>
+                                    <FaPlay color="var(--brand-gold)" />
                                 </div>
                             </div>
                         ))}
