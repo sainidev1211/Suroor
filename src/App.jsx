@@ -94,7 +94,7 @@ function App() {
          For Audio tracks, this plays the audio.
       */}
       {audio.currentTrack && !audio.currentTrack.isVideo && (
-        <div style={{ display: 'none' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: 1, height: 1, opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
           <ReactPlayer
             ref={audio.playerRef}
             url={`https://www.youtube.com/watch?v=${audio.currentTrack.id}`}
