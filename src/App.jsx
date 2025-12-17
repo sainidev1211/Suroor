@@ -13,7 +13,9 @@ import { RightPanelPlayer } from './components/RightPanelPlayer';
 import ReactPlayer from 'react-player';
 
 function App() {
-  const [view, setView] = useState('music'); // 'music', 'podcasts', 'stories'
+  // Check URL for admin access (e.g., /?admin=true)
+  const initialView = new URLSearchParams(window.location.search).get('admin') ? 'admin' : 'music';
+  const [view, setView] = useState(initialView);
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true); // Default open
 
