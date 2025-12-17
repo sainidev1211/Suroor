@@ -191,7 +191,8 @@ export function Player({
                     </div>
                 </div>
             </div>
-            {(isLoadingNext || isBuffering) && <div style={{ position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', padding: '4px 12px', borderRadius: 12, fontSize: 12, color: '#ffbe0b' }}>Loading...</div>}
+            {(isLoadingNext || isBuffering) && <div style={{ position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', padding: '4px 12px', borderRadius: 12, fontSize: 12, color: '#ffbe0b' }}>Loading... (v3.0)</div>}
+            {!isLoadingNext && !isBuffering && <div style={{ position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)', opacity: 0.3, fontSize: 10, color: '#fff' }}>v3.0</div>}
 
             {/* Simple Lyrics Overlay */}
             {/* Simple Lyrics Overlay */}

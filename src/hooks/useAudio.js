@@ -110,6 +110,7 @@ export function useAudio() {
 
     // --- ReactPlayer Callbacks (Called from App.jsx) ---
     const onProgress = (state) => {
+        if (isBuffering) setIsBuffering(false); // Failsafe: if playing, not buffering
         setCurrentTime(state.playedSeconds);
         // Prefetch Logic
         const remaining = duration - state.playedSeconds;
