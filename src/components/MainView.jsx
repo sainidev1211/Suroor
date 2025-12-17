@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaChevronLeft, FaChevronRight, FaSearch, FaPlay, FaCrown, FaTrash, FaClock, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Loader } from './Loader';
+import { LoginView } from './LoginView';
 
 const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -131,50 +132,7 @@ export function MainView({ view, setView, likedSongs, playlists, onPlay, current
 
     // AUTH VIEW
     if (view === 'login') {
-        const [isSignup, setIsSignup] = useState(false);
-        const [authError, setAuthError] = useState("");
-
-        const handleAuth = async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            setAuthError("");
-
-            try {
-                if (isSignup) {
-                    await onSignup(data.name, data.email, data.password);
-                    alert("Account created!");
-                } else {
-                    await onLogin(data.email, data.password);
-                }
-                // Redirect implicit via state change in parent or manual?
-                // Usually parent will switch view if user is logged in.
-            } catch (err) {
-                setAuthError("Authentication failed. Please check credentials.");
-            }
-        };
-
-        content = (
-            <div className="login-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white' }}>
-                <div style={{ background: '#222', padding: 40, borderRadius: 12, width: 400 }}>
-                    <h2 style={{ textAlign: 'center', marginBottom: 24 }}>{isSignup ? "Create Account" : "Log in to SUROOR"}</h2>
-                    <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                        {isSignup && <input name="name" placeholder="Full Name" required style={{ padding: 12, borderRadius: 4, border: 'none' }} />}
-                        <input name="email" type="email" placeholder="Email" required style={{ padding: 12, borderRadius: 4, border: 'none' }} />
-                        <input name="password" type="password" placeholder="Password" required style={{ padding: 12, borderRadius: 4, border: 'none' }} />
-
-                        {authError && <div style={{ color: 'red', fontSize: 12, textAlign: 'center' }}>{authError}</div>}
-
-                        <button type="submit" style={{ padding: 12, borderRadius: 24, border: 'none', background: 'var(--brand-gold)', color: 'black', fontWeight: 700, cursor: 'pointer', marginTop: 10 }}>
-                            {isSignup ? "Sign Up" : "Log In"}
-                        </button>
-                    </form>
-                    <div style={{ marginTop: 20, textAlign: 'center', fontSize: 14, color: '#aaa', cursor: 'pointer' }} onClick={() => setIsSignup(!isSignup)}>
-                        {isSignup ? "Already have an account? Log In" : "Don't have an account? Sign Up"}
-                    </div>
-                </div>
-            </div>
-        );
+        content = <LoginView onLogin={onLogin} onSignup={onSignup} />;
     } else if (view === 'news_india' || view === 'news_intl') {
         // Special Layout for News - List Only (Video opens in FullScreen)
         content = (
