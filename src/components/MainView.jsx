@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FaChevronLeft, FaChevronRight, FaSearch, FaPlay, FaCrown, FaTrash, FaClock, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Loader } from './Loader';
 import { LoginView } from './LoginView';
+import { AdminView } from './AdminView';
 
 const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -133,6 +134,8 @@ export function MainView({ view, setView, likedSongs, playlists, onPlay, current
     // AUTH VIEW
     if (view === 'login') {
         content = <LoginView onLogin={onLogin} onSignup={onSignup} />;
+    } else if (view === 'admin') {
+        content = <AdminView />;
     } else if (view === 'news_india' || view === 'news_intl') {
         // Special Layout for News - List Only (Video opens in FullScreen)
         content = (

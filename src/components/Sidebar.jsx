@@ -59,6 +59,9 @@ export function Sidebar({ setView }) {
                 <NavItem id="community" icon={FaUsers} label="Community" />
                 <NavItem id="events" icon={FaCalendarAlt} label="Events" />
                 <NavItem id="live" icon={FaVideo} label="Live" />
+
+                <div style={{ margin: '10px 0', borderTop: '1px solid rgba(255,255,255,0.1)' }}></div>
+                <NavItem id="admin" icon={FaUsers} label="Admin" />
             </nav>
         </aside>
     );
