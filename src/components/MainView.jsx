@@ -101,7 +101,7 @@ export function MainView({ view, setView, likedSongs, playlists, onPlay, current
 
     // RENDER HELPERS
     const renderCard = (track) => (
-        <div key={track.id} className="card group">
+        <div key={track.id} className="card group" onClick={() => onPlay(track)} style={{ cursor: 'pointer' }}>
             {/* Image & Hover Actions */}
             <div className="card-img-wrapper" style={{ position: 'relative' }}>
                 <img src={track.cover} alt={track.title} />

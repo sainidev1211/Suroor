@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import ReactPlayer from 'react-player';
 import { FaTimes, FaHeart, FaRegHeart, FaEllipsisH, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
 
-export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, createPlaylist }) {
+export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, createPlaylist, audioState, isOpen }) {
     // 1. Basic State
     // No video state needed anymore.
 
@@ -38,19 +39,36 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                 {/* Video Player (Music Only) or Cover */}
                 <div className="large-cover-wrapper">
                     {track.id ? (
-                        // Show Embed for Music Tracks (even if they have video)
-                        // Only News Live Streams are handled in Main View now.
-                        // We assume logic elsewhere handles "News Mode" routing.
-                        // For Right Panel, if it's here, we show it (unless it triggers double audio? No, useAudio mutes global for News).
-                        // Wait, for Music, we WANT global audio.
-                        <iframe
-                            src={`https://www.youtube.com/embed/${track.id}?autoplay=1&controls=0&disablekb=1&fs=0&modestbranding=1&iv_load_policy=3&mute=1&enablejsapi=1`}
-                            title={track.title}
+                        <ReactPlayer
+                            ref={audioState.playerRef}
+                            url={`https://www.youtube.com/watch?v=${track.id}`}
+                            playing={audioState.isPlaying}
+                            volume={audioState.volume}
+                            muted={false} // Frontend volume control
                             width="100%"
                             height="100%"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            style={{ background: 'black', pointerEvents: 'none', filter: 'brightness(0.7)' }}
+                            controls={false} // Controlled by Bottom Player
+                            onProgress={audioState.handleProgress}
+                            onDuration={audioState.handleDuration}
+                            onEnded={audioState.handleEnded}
+                            onBuffer={audioState.handleBuffer}
+                            onBufferEnd={audioState.handleBufferEnd}
+                            onError={audioState.handleError}
+                            style={{ background: '#000' }}
+                            config={{
+                                youtube: {
+                                    playerVars: {
+                                        autoplay: 1,
+                                        controls: 0,
+                                        modestbranding: 1,
+                                        rel: 0, // No related videos
+                                        fs: 0, // No fullscreen button
+                                        iv_load_policy: 3, // No annotations
+                                        disablekb: 1,
+                                        playsinline: 1
+                                    }
+                                }
+                            }}
                         />
                     ) : (
                         <img src={track.cover} alt={track.title} className="large-cover" />
@@ -83,7 +101,6 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                 </div>
 
                 {/* Credits */}
-                {/* Credits & Advanced Options */}
                 <div className="panel-section">
                     <h4>Credits</h4>
                     <div className="credit-row">
@@ -92,26 +109,13 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                     </div>
                 </div>
 
-                {/* Simplified for Music Only - No Video Controls here */}
-
                 {/* PLAYLIST ADD */}
                 <div className="panel-section">
                     <h4>Add to Playlist</h4>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                        <button onClick={() => {
-                            const name = prompt("New Playlist Name:");
-                            if (name) toggleLike(track); // Hacky trigger for create? No need explicit create prop.
-                            // Actually we need createPlaylist passed down. 
-                            // For now, let's just use a simple mock or context if not passed.
-                            // User asked for "Option for create playlist".
-                            alert("Please go to Sidebar to create a playlist first! (Coming Soon feature in panel)");
-                        }} style={{ padding: '6px 12px', borderRadius: 16, border: '1px solid #444', background: 'transparent', color: 'white', cursor: 'pointer' }}>
+                        <button onClick={() => addToPlaylist(track.id)} style={{ padding: '6px 12px', borderRadius: 16, border: '1px solid #444', background: 'transparent', color: 'white', cursor: 'pointer' }}>
                             + New Playlist
                         </button>
-                        {/* We needs playlists prop here ideally, but for now just showing UI or we can assume it's passed or useLibrary inside? 
-                            Risk: RightPanelPlayer is dumb component. 
-                            Correction: App.jsx needs to pass playlists and addToPlaylist.
-                        */}
                     </div>
                 </div>
             </div>

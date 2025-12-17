@@ -93,32 +93,7 @@ function App() {
          For Video tracks (News), we mute/hide this and let FullScreenPlayer handle it.
          For Audio tracks, this plays the audio.
       */}
-      {audio.currentTrack && !audio.currentTrack.isVideo && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: 1, height: 1, opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
-          <ReactPlayer
-            ref={audio.playerRef}
-            url={`https://www.youtube.com/watch?v=${audio.currentTrack.id}`}
-            playing={audio.isPlaying}
-            volume={audio.volume} // FIXED: use audio.volume
-            width="0"
-            height="0"
-            onProgress={audio.handleProgress}
-            onDuration={audio.handleDuration}
-            onEnded={audio.handleEnded}
-            onBuffer={audio.handleBuffer}
-            onBufferEnd={audio.handleBufferEnd}
-            config={{
-              youtube: {
-                playerVars: {
-                  start: audio.seekOffset || 0,
-                  autoplay: 1,
-                  playsinline: 1
-                }
-              }
-            }}
-          />
-        </div>
-      )}
+      {/* Hidden Audio Engine Removed - Moved to RightPanelPlayer */}
 
       {/* Expose setVolume needed for ReactPlayer above? 
           We use audio.volume in the hook.
@@ -145,11 +120,17 @@ function App() {
         isLiked={library.isLiked}
       />
 
-      {/* Right Panel: HIDE if playing News video (moved to main) */}
-      {isRightPanelOpen && audio.currentTrack && !audio.currentTrack.isVideo && (
+      {/* 
+         CENTRALIZED MEDIA PLAYER (In Right Panel)
+         We pass the `audio` object to RightPanelPlayer so it renders the real ReactPlayer.
+         We keep RightPanelPlayer MOUNTED even if closed, so audio keeps playing.
+         We use `display: none` when closed.
+      */}
+      <div style={{ display: isRightPanelOpen || (audio.currentTrack && audio.isPlaying) ? 'block' : 'none', height: '100%', position: 'absolute', right: 0, top: 0, zIndex: 50 }}>
         <RightPanelPlayer
           track={audio.currentTrack}
           onClose={() => setIsRightPanelOpen(false)}
+          isOpen={isRightPanelOpen}
           toggleLike={library.toggleLike}
           isLiked={library.isLiked}
           isPlaying={audio.isPlaying}
@@ -157,8 +138,9 @@ function App() {
           addToPlaylist={library.addToPlaylist}
           playlists={library.playlists}
           createPlaylist={library.createPlaylist}
+          audioState={audio} // PASS FULL AUDIO STATE
         />
-      )}
+      </div>
 
       {/* Bottom Player: Hide if News is playing */}
       <div style={{ display: audio.currentTrack?.isVideo ? 'none' : 'block' }}>

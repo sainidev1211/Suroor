@@ -38,6 +38,13 @@ export function useAudio() {
         setPrefetched(false);
         setIsBuffering(true); // Assume buffering on track switch
 
+        // DIRECT YOUTUBE PLAYBACK - NO PROXY
+        const directUrl = `https://www.youtube.com/watch?v=${track.id}`;
+
+        const tempTrack = { ...track, streamUrl: directUrl };
+        setCurrentTrack(tempTrack);
+        setIsPlaying(true); // Show player immediately
+
         if (newQueue) {
             setQueue(newQueue);
             const idx = newQueue.findIndex(t => t.id === track.id);
@@ -47,20 +54,15 @@ export function useAudio() {
             setCurrentIndex(0);
         }
 
-        // Just set the track, ReactPlayer will pick up the URL change and auto-play
-        setCurrentTrack(track);
-        setIsPlaying(true);
         setDuration(track.durationSec || 0);
     };
 
-    const playIndex = (index) => {
+    const playIndex = async (index) => {
         const q = queueRef.current;
         if (index >= 0 && index < q.length) {
             setCurrentIndex(index);
-            setPrefetched(false);
-            setIsBuffering(true);
-            setCurrentTrack(q[index]);
-            setIsPlaying(true);
+            // Reuse playTrack logic for the specific track
+            await playTrack(q[index], null); // Pass null queue to preserve current queue
         }
     };
 
@@ -138,8 +140,15 @@ export function useAudio() {
         }
     };
 
-    const onBuffer = () => setIsBuffering(true);
-    const onBufferEnd = () => setIsBuffering(false);
+    const handleBuffer = () => setIsBuffering(true);
+    const handleBufferEnd = () => setIsBuffering(false);
+
+    const handleError = (e) => {
+        console.error("Audio Error:", e);
+        setIsBuffering(false);
+        setIsPlaying(false);
+        // Optional: Auto-skip or retry logic could go here
+    };
 
     return {
         playerRef, // EXPOSED REF
@@ -167,7 +176,8 @@ export function useAudio() {
         handleProgress: onProgress,
         handleDuration: onDuration,
         handleEnded: onEnded,
-        handleBuffer: onBuffer,
-        handleBufferEnd: onBufferEnd
+        handleBuffer: handleBuffer,
+        handleBufferEnd: handleBufferEnd,
+        handleError // EXPORTED
     };
 }
