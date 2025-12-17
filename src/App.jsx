@@ -99,7 +99,7 @@ function App() {
             ref={audio.playerRef}
             url={`https://www.youtube.com/watch?v=${audio.currentTrack.id}`}
             playing={audio.isPlaying}
-            volume={volume} // We need to expose volume variable from App scope or pass it via audio hook
+            volume={audio.volume} // FIXED: use audio.volume
             width="0"
             height="0"
             onProgress={audio.handleProgress}
