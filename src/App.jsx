@@ -10,7 +10,7 @@ import './index.css';
 import { FullScreenPlayer } from './components/FullScreenPlayer';
 import { RightPanelPlayer } from './components/RightPanelPlayer';
 
-import ReactPlayer from 'react-player/youtube';
+import ReactPlayer from 'react-player';
 
 function App() {
   const [view, setView] = useState('music'); // 'music', 'podcasts', 'stories'
