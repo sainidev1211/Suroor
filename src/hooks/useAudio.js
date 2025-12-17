@@ -142,6 +142,15 @@ export function useAudio() {
 
     const handleBuffer = () => setIsBuffering(true);
     const handleBufferEnd = () => setIsBuffering(false);
+    const handleReady = () => {
+        console.log("Player Ready");
+        setIsBuffering(false);
+    };
+    const handleStart = () => {
+        console.log("Player Started");
+        setIsBuffering(false);
+        setIsPlaying(true);
+    };
 
     const handleError = (e) => {
         console.error("Audio Error:", e);
@@ -178,6 +187,8 @@ export function useAudio() {
         handleEnded: onEnded,
         handleBuffer: handleBuffer,
         handleBufferEnd: handleBufferEnd,
+        handleReady,
+        handleStart,
         handleError // EXPORTED
     };
 }

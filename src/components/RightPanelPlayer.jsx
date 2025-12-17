@@ -48,6 +48,8 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                             width="100%"
                             height="100%"
                             controls={false} // Controlled by Bottom Player
+                            onReady={() => { console.log("RightPanelPlayer: onReady"); audioState.handleReady && audioState.handleReady(); }}
+                            onStart={() => { console.log("RightPanelPlayer: onStart"); audioState.handleStart && audioState.handleStart(); }}
                             onProgress={audioState.handleProgress}
                             onDuration={audioState.handleDuration}
                             onEnded={audioState.handleEnded}
