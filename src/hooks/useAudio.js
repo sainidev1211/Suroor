@@ -7,6 +7,9 @@ export function useAudio() {
 
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(1);
+    const [currentTrack, setCurrentTrack] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
 
     // Queue System
     const [queue, setQueue] = useState([]);
