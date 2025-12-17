@@ -121,25 +121,8 @@ function App() {
       )}
 
       {/* Expose setVolume needed for ReactPlayer above? 
-          Wait, audio.volume is in the hook. we should use audio.volume.
+          We use audio.volume in the hook.
       */}
-      <div style={{ display: 'none' }}>
-        {audio.currentTrack && !audio.currentTrack.isVideo && (
-          <ReactPlayer
-            ref={audio.playerRef}
-            url={`https://www.youtube.com/watch?v=${audio.currentTrack.id}`}
-            playing={audio.isPlaying}
-            volume={audio.volume}
-            width="0"
-            height="0"
-            onProgress={audio.handleProgress}
-            onDuration={audio.handleDuration}
-            onEnded={audio.handleEnded}
-            onBuffer={audio.handleBuffer}
-            onBufferEnd={audio.handleBufferEnd}
-          />
-        )}
-      </div>
 
       <Sidebar
         setView={setView}
