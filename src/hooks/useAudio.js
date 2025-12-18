@@ -35,15 +35,29 @@ export function useAudio() {
     // --- Actions ---
 
     const playTrack = async (track, newQueue = null) => {
+        console.log("[useAudio] playTrack called for:", track.title);
         setPrefetched(false);
-        setIsBuffering(true); // Assume buffering on track switch
+        setIsBuffering(true); // Assume buffering
 
-        // DIRECT YOUTUBE PLAYBACK - NO PROXY
+        // DIRECT YOUTUBE PLAYBACK
         const directUrl = `https://www.youtube.com/watch?v=${track.id}`;
+        console.log("[useAudio] Stream URL:", directUrl);
 
         const tempTrack = { ...track, streamUrl: directUrl };
         setCurrentTrack(tempTrack);
-        setIsPlaying(true); // Show player immediately
+        setIsPlaying(true); // Trigger ReactPlayer
+
+        // Check Ref immediately and after delay
+        console.log("[useAudio] playerRef immediately:", playerRef.current);
+        setTimeout(() => {
+            console.log("[useAudio] playerRef after 1s:", playerRef.current);
+            if (playerRef.current && playerRef.current.getInternalPlayer()) {
+                console.log("[useAudio] Internal Player found. Attempting force play.");
+                // playerRef.current.getInternalPlayer().playVideo(); // ReactPlayer manages this via 'playing' prop usually
+            } else {
+                console.warn("[useAudio] Player Ref is NULL or Internal Player missing!");
+            }
+        }, 1000);
 
         if (newQueue) {
             setQueue(newQueue);
@@ -154,7 +168,7 @@ export function useAudio() {
     };
 
     const handleError = (e) => {
-        console.error("Audio Error:", e);
+        console.error("[useAudio] PLAYER ERROR:", e);
         setIsBuffering(false);
         setIsPlaying(false);
         // Optional: Auto-skip or retry logic could go here

@@ -40,7 +40,11 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                 <div className="large-cover-wrapper">
                     {track.id ? (
                         <ReactPlayer
-                            ref={audioState.playerRef}
+                            ref={(p) => {
+                                // Double binding to ensure we catch it
+                                if (audioState.playerRef) audioState.playerRef.current = p;
+                                console.log("[RightPanelPlayer] ReactPlayer Ref Callback:", p);
+                            }}
                             url={`https://www.youtube.com/watch?v=${track.id}`}
                             playing={audioState.isPlaying}
                             volume={audioState.volume}
