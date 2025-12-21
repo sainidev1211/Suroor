@@ -71,6 +71,20 @@ export function Sidebar() {
                 <NavItem id="events" icon={FaCalendarAlt} label="Events" />
                 <NavItem id="live" icon={FaVideo} label="Live" />
             </nav>
+
+            {/* LEGAL FOOTER */}
+            <div style={{ marginTop: 'auto', paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 11, color: '#666' }}>
+                    <span style={{ cursor: 'pointer' }}>Legal</span>
+                    <span style={{ cursor: 'pointer' }}>Privacy Center</span>
+                    <span style={{ cursor: 'pointer' }}>Privacy Policy</span>
+                    <span style={{ cursor: 'pointer' }}>Cookies</span>
+                    <span style={{ cursor: 'pointer' }}>About Ads</span>
+                </div>
+                <div style={{ marginTop: 12, fontSize: 11, color: '#666' }}>
+                    © 2025 SUROOR Platform
+                </div>
+            </div>
         </aside>
     );
 }
