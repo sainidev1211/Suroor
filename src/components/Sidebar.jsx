@@ -1,7 +1,5 @@
 import React from 'react';
-import { FaMusic, FaMicrophone, FaBookOpen, FaMagic, FaAlignLeft, FaTicketAlt, FaUsers, FaCalendarAlt, FaVideo, FaHeart, FaGlobe, FaSatelliteDish } from 'react-icons/fa';
-// import logo from '../assets/logo.jpg'; 
-
+import { FaMusic, FaBookOpen, FaMagic, FaAlignLeft, FaTicketAlt, FaUsers, FaCalendarAlt, FaVideo, FaHeart, FaGlobe, FaSatelliteDish } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export function Sidebar() {
@@ -45,12 +43,11 @@ export function Sidebar() {
             {/* LOGO */}
             <div className="logo">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 8px' }}>
-                    <img src="/suroor_logo.jpg" alt="SUROOR" className="logo-img" style={{ maxWidth: 40, borderRadius: 8 }} />
+                    {/* Safe relative path for GH Pages with base /Suroor/ */}
+                    <img src={import.meta.env.BASE_URL + "suroor_logo.jpg"} alt="SUROOR" className="logo-img" style={{ maxWidth: 40, borderRadius: 8, objectFit: 'cover' }} onError={(e) => e.target.style.display = 'none'} />
                     <span style={{ fontSize: '24px', fontWeight: '700', color: 'var(--brand-gold)', letterSpacing: '1px' }}>SUROOR</span>
                 </div>
             </div>
-
-
 
             {/* NAV MENU */}
             <nav className="nav-menu">
