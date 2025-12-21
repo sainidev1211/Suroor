@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import { Sidebar } from './components/Sidebar';
-import { MainView } from './components/MainView';
 import { Player } from './components/Player';
 import { RightPanelPlayer } from './components/RightPanelPlayer';
 import PremiumLoader from './components/PremiumLoader';
+import { Home } from './pages/Home';
+import { Stories } from './pages/Stories';
+import { Library } from './pages/Library';
 import { useLibrary } from './hooks/useLibrary';
 import './index.css';
 
-function App() {
-  const [view, setView] = useState('music');
+function AppContent() {
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
 
   // NEW STATE: Simple Song & Player
@@ -37,6 +40,7 @@ function App() {
     };
   }, [hasUserInteracted]);
 
+  // Use old library hook for compatible Home/MainView props for now
   const library = useLibrary();
 
   const handlePlay = (track) => {
@@ -70,20 +74,26 @@ function App() {
         </div>
       )}
 
-      <Sidebar setView={setView} />
+      <Sidebar />
 
-      <MainView
-        setView={setView}
-        view={view}
-        onPlay={handlePlay}
-        currentTrack={currentSong}
-        likedSongs={library.likedSongs}
-        user={library.user}
-        onLogin={library.login}
-        onSignup={library.signup}
-        toggleLike={library.toggleLike}
-        isLiked={library.isLiked}
-      />
+      <div style={{ flex: 1, overflow: 'hidden' }}> {/* Main Content Area */}
+        <Routes>
+          <Route path="/" element={
+            <Home
+              onPlay={handlePlay}
+              currentTrack={currentSong}
+              likedSongs={library.likedSongs}
+              user={library.user}
+              onLogin={library.login}
+              onSignup={library.signup}
+              toggleLike={library.toggleLike}
+              isLiked={library.isLiked}
+            />
+          } />
+          <Route path="/stories" element={<Stories onPlay={handlePlay} />} />
+          <Route path="/library" element={<Library onPlay={handlePlay} />} />
+        </Routes>
+      </div>
 
       {/* ALWAYS RENDER RIGHT PANEL IF SONG EXISTS (Hide on Mobile) */}
       <div className="right-panel-container" style={{ display: currentSong ? 'block' : 'none' }}>
@@ -120,6 +130,16 @@ function App() {
         }
       `}</style>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -2,17 +2,31 @@ import React from 'react';
 import { FaMusic, FaMicrophone, FaBookOpen, FaMagic, FaAlignLeft, FaTicketAlt, FaUsers, FaCalendarAlt, FaVideo, FaHeart, FaGlobe, FaSatelliteDish } from 'react-icons/fa';
 // import logo from '../assets/logo.jpg'; 
 
-export function Sidebar({ setView }) {
-    // Helper to determine active state - simplified for this demo
-    const [active, setActive] = React.useState('music');
+import { useNavigate, useLocation } from 'react-router-dom';
+
+export function Sidebar() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Determine active based on path
+    const getActive = () => {
+        const path = location.pathname;
+        if (path === '/') return 'music';
+        if (path === '/stories') return 'stories';
+        if (path === '/library') return 'favorites';
+        return '';
+    };
+
+    const active = getActive();
 
     const handleNav = (id) => {
-        setActive(id);
-        if (['music', 'podcasts', 'stories', 'horror', 'crime'].includes(id)) {
-            setView(id);
-        } else {
-            console.log("Navigated to:", id);
-            setView(id); // Allow all views to trigger setView
+        if (id === 'music') navigate('/');
+        else if (id === 'stories') navigate('/stories');
+        else if (id === 'favorites') navigate('/library');
+        else if (id === 'horror' || id === 'crime') navigate('/stories');
+        else {
+            console.log("Navigating to Placeholder:", id);
+            navigate('/'); // Fallback
         }
     };
 
