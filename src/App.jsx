@@ -8,6 +8,7 @@ import PremiumLoader from './components/PremiumLoader';
 import { Home } from './pages/Home';
 import { Stories } from './pages/Stories';
 import { Library } from './pages/Library';
+import { AI } from './pages/AI';
 import { useLibrary } from './hooks/useLibrary';
 import './index.css';
 
@@ -92,6 +93,7 @@ function AppContent() {
           } />
           <Route path="/stories" element={<Stories onPlay={handlePlay} />} />
           <Route path="/library" element={<Library onPlay={handlePlay} />} />
+          <Route path="/ai" element={<AI onPlay={handlePlay} />} />
         </Routes>
       </div>
 
