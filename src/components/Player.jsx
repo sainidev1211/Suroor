@@ -18,16 +18,19 @@ export function Player({ player, currentTrack, onNext, onPrev }) {
         return () => clearInterval(interval);
     }, [isPlaying]);
 
-    if (!currentTrack) return null;
+    // Always render, even if empty (Spotify style)
+    const trackTitle = currentTrack?.title || "No Song Selected";
+    const trackArtist = currentTrack?.artist || "";
+    const coverArt = currentTrack?.cover || "https://placehold.co/56x56/222/555?text=Music";
 
     return (
         <div className="spotify-player">
             {/* Left: Info */}
             <div className="player-left">
-                <img src={currentTrack.cover} alt="" className="player-art" />
+                <img src={coverArt} alt="" className="player-art" />
                 <div className="player-info-text">
-                    <div className="player-track-name">{currentTrack.title}</div>
-                    <div className="player-artist-name">{currentTrack.artist}</div>
+                    <div className="player-track-name">{trackTitle}</div>
+                    <div className="player-artist-name">{trackArtist}</div>
                 </div>
             </div>
 

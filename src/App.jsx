@@ -44,26 +44,38 @@ function App() {
         isLiked={library.isLiked}
       />
 
-      {/* ALWAYS RENDER RIGHT PANEL IF SONG EXISTS */}
-      <div style={{ display: currentSong ? 'block' : 'none', height: '100%', position: 'absolute', right: 0, top: 0, zIndex: 50 }}>
+      {/* ALWAYS RENDER RIGHT PANEL IF SONG EXISTS (Hide on Mobile) */}
+      <div className="right-panel-container" style={{ display: currentSong ? 'block' : 'none' }}>
         <RightPanelPlayer
           track={currentSong}
           onClose={() => setIsRightPanelOpen(false)}
           setPlayer={setPlayer}
-          onVideoReady={() => {
-            // We could hide loader here if we had a precise event. 
-            // For now, we rely on the visual overlay fading or App state.
-          }}
+          onVideoReady={() => { }}
         />
       </div>
 
-      {/* BOTTOM PLAYER - ALWAYS VISIBLE IF SONG EXISTS */}
-      <div style={{ display: currentSong ? 'block' : 'none' }}>
+      {/* BOTTOM PLAYER - ALWAYS VISIBLE */}
+      <div style={{ display: 'block' }}>
         <Player
           player={player}
           currentTrack={currentSong}
         />
       </div>
+
+      <style>{`
+        .right-panel-container {
+            height: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 50;
+        }
+        @media (max-width: 1024px) {
+            .right-panel-container {
+                display: none !important;
+            }
+        }
+      `}</style>
     </div>
   );
 }
