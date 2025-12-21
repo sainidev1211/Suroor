@@ -7,7 +7,7 @@ import { AdminView } from './AdminView';
 
 const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
-export function MainView({ view, setView, likedSongs, playlists, onPlay, currentTrack, user, onLogin, onSignup, toggleLike, isLiked }) {
+export function MainView({ view = 'music', setView, likedSongs, playlists, onPlay, currentTrack, user, onLogin, onSignup, toggleLike, isLiked }) {
 
     const [query, setQuery] = useState("");
     const [tracks, setTracks] = useState([]);

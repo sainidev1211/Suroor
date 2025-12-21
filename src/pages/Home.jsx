@@ -3,5 +3,5 @@ import { MainView } from '../components/MainView'; // Reuse existing MainView lo
 
 export const Home = (props) => {
     // We pass props through to MainView to maintain existing music grid
-    return <MainView {...props} />;
+    return <MainView view="music" {...props} />;
 };
