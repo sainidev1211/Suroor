@@ -268,7 +268,7 @@ export function MainView({ view = 'music', setView, likedSongs, playlists, onPla
                             <img src={user.avatar || "https://i.pravatar.cc/150"} alt="User" />
                         </>
                     ) : (
-                        <button onClick={() => setView('login')} style={{
+                        <button onClick={() => window.location.hash = '/library'} style={{
                             background: 'white', color: 'black', border: 'none',
                             padding: '8px 24px', borderRadius: 20, fontWeight: 'bold', cursor: 'pointer'
                         }}>
