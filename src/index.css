@@ -521,63 +521,23 @@ input[type=range]::-moz-range-thumb {
   background: transparent;
   position: relative;
   overflow: hidden;
+  /* Contains the scrollable area */
+  height: 100vh;
+  /* Force height constraint */
 }
 
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 32px;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-}
-
-.search-box {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 320px;
-}
-
-.search-box input {
-  background: transparent;
-  border: none;
-  color: white;
-  width: 100%;
-  outline: none;
-  font-size: 14px;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 30px;
-  cursor: pointer;
-}
-
-.user-profile img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-}
-
-.crown-icon {
-  color: var(--brand-gold);
-}
+/* ... top bar ... */
 
 .content-area {
   flex: 1;
   overflow-y: auto;
+  /* Enable scrolling */
+  min-height: 0;
+  /* Critical flexbox fix for nested scrolling */
   padding: 32px;
-  padding-bottom: 100px;
-  /* Space for player */
+  padding-bottom: 150px;
+  /* More space for player */
+  scroll-behavior: smooth;
 }
 
 .section-title {

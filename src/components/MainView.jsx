@@ -174,23 +174,38 @@ export function MainView({ view = 'music', setView, likedSongs, playlists, onPla
     else if (view === 'favorites') title = "Liked Songs";
     else title = view.charAt(0).toUpperCase() + view.slice(1);
 
+    // SKELETON CARD (Instant Loading State)
+    const SkeletonCard = () => (
+        <div className="card" style={{ pointerEvents: 'none' }}>
+            <div className="card-img-wrapper" style={{ background: 'rgba(255,255,255,0.1)', aspectRatio: '1', width: '100%', borderRadius: 4 }}></div>
+            <div style={{ height: 16, background: 'rgba(255,255,255,0.1)', marginTop: 12, borderRadius: 4, width: '80%' }}></div>
+            <div style={{ height: 12, background: 'rgba(255,255,255,0.05)', marginTop: 8, borderRadius: 4, width: '50%' }}></div>
+        </div>
+    );
+
     if (!['news_india', 'news_intl', 'login'].includes(view)) {
         if (view === 'favorites') {
-            // ... existing favorites logic
             content = (
                 <div className="cards-grid">
                     {likedSongs && likedSongs.length > 0 ? likedSongs.map(renderCard) : <div style={{ color: '#aaa', padding: 20 }}>No liked songs yet. Go explore!</div>}
                 </div>
             );
         } else if (['music', 'podcasts', 'stories', 'horror', 'crime', 'home'].includes(view)) {
-            // ... existing grid logic
-            content = (
-                <div className="cards-grid">
-                    {tracks.map(renderCard)}
-                </div>
-            );
+            // SHOW SKELETONS IF LOADING OR NO TRACKS YET
+            if (isSearching || tracks.length === 0) {
+                content = (
+                    <div className="cards-grid">
+                        {[...Array(10)].map((_, i) => <SkeletonCard key={i} />)}
+                    </div>
+                );
+            } else {
+                content = (
+                    <div className="cards-grid">
+                        {tracks.map(renderCard)}
+                    </div>
+                );
+            }
         } else {
-            // SOON
             content = (
                 <div style={{
                     height: '60vh', display: 'flex', flexDirection: 'column',
