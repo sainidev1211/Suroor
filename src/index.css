@@ -268,6 +268,7 @@ input[type=range]::-moz-range-thumb {
   align-items: center;
   justify-content: center;
 }
+
 /* Player Bar */
 .player-bar {
   position: fixed;
@@ -478,14 +479,39 @@ input[type=range]::-moz-range-thumb {
   font-weight: 500;
 }
 
-.nav-item:hover, .nav-item.active {
-  background: var(--brand-purple); /* Active purple background */
+.nav-item:hover,
+.nav-item.active {
+  background: var(--brand-purple);
+  /* Active purple background */
   color: white;
   box-shadow: 0 4px 12px rgba(80, 46, 255, 0.4);
 }
 
 .nav-item.active {
   background: linear-gradient(90deg, var(--brand-purple) 0%, #3a0ca3 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .main-view {
@@ -550,7 +576,8 @@ input[type=range]::-moz-range-thumb {
   flex: 1;
   overflow-y: auto;
   padding: 32px;
-  padding-bottom: 100px; /* Space for player */
+  padding-bottom: 100px;
+  /* Space for player */
 }
 
 .section-title {
@@ -585,18 +612,18 @@ input[type=range]::-moz-range-thumb {
   margin-bottom: 16px;
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .card-img-wrapper img {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  transition: transform 0.3s;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .card:hover .card-img-wrapper img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .play-btn {
@@ -613,7 +640,7 @@ input[type=range]::-moz-range-thumb {
   opacity: 0;
   transform: translateY(8px);
   transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .card:hover .play-btn {
