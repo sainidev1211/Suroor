@@ -16,10 +16,11 @@ function App() {
   const [player, setPlayer] = useState(null);
   const [isSystemReady, setIsSystemReady] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [isSongLoading, setIsSongLoading] = useState(false);
 
   React.useEffect(() => {
     // Simulate System Boot
-    setTimeout(() => setIsSystemReady(true), 2000);
+    setTimeout(() => setIsSystemReady(true), 1500);
 
     // Detect First User Interaction
     const unlockAutoplay = () => {
@@ -40,13 +41,19 @@ function App() {
 
   const handlePlay = (track) => {
     console.log("App: Play Request", track);
-    // Ensure we have an ID for YouTube
-    // If the track object from MainView has 'id' (youtube ID), use it.
+    setIsSongLoading(true);
     setCurrentSong({
       ...track,
-      youtubeId: track.id // Assuming track.id IS the video ID
+      youtubeId: track.id
     });
     setIsRightPanelOpen(true);
+  };
+
+  const handlePlayerStateChange = (state) => {
+    // 1 = Playing. If playing, stop loading.
+    if (state === 1) {
+      setIsSongLoading(false);
+    }
   };
 
   return (
@@ -54,6 +61,12 @@ function App() {
       {!isSystemReady && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, background: 'black' }}>
           <PremiumLoader song="Welcome to Suroor" artist="Loading System..." />
+        </div>
+      )}
+
+      {isSongLoading && currentSong && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: 'calc(100% - 90px)', zIndex: 150, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)' }}>
+          <PremiumLoader song={currentSong.title} artist={currentSong.artist} />
         </div>
       )}
 
@@ -79,6 +92,7 @@ function App() {
           onClose={() => setIsRightPanelOpen(false)}
           setPlayer={setPlayer}
           autoPlay={hasUserInteracted}
+          onStateChange={handlePlayerStateChange}
           onVideoReady={() => { }}
         />
       </div>

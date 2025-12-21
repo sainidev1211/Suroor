@@ -3,26 +3,13 @@ import YouTubePlayer from "./YouTubePlayer";
 import PremiumLoader from "./PremiumLoader";
 import { FaTimes, FaEllipsisH } from 'react-icons/fa';
 
-export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, setPlayer, isOpen, autoPlay }) {
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        setIsLoading(true);
-    }, [track?.id]);
-
-    const handleStateChange = (state) => {
-        // State 1 = Playing, 3 = Buffering
-        if (state === 1) {
-            setIsLoading(false);
-        }
-    };
+export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, setPlayer, isOpen, autoPlay, onStateChange }) {
+    // Local loading removed. Controlled by App.jsx
 
     if (!track) return null;
 
     return (
         <div className="right-panel glass-panel">
-            {isLoading && <PremiumLoader song={track.title} artist={track.artist} />}
-
             <div className="panel-header">
                 <h3>Now Playing</h3>
                 <div className="header-actions">
@@ -39,7 +26,7 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                                 videoId={track.youtubeId || track.id}
                                 onPlayerReady={setPlayer}
                                 autoPlay={autoPlay}
-                                onStateChange={handleStateChange}
+                                onStateChange={onStateChange}
                             />
                         </div>
                     ) : (
