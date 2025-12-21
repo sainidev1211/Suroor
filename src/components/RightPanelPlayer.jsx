@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import YouTubePlayer from "./YouTubePlayer";
-import { FaTimes, FaHeart, FaRegHeart, FaEllipsisH } from 'react-icons/fa';
+import PremiumLoader from "./PremiumLoader";
+import { FaTimes, FaEllipsisH } from 'react-icons/fa';
 
 export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, setPlayer, isOpen }) {
-    // track is equivalent to currentSong
-    // setPlayer is passed from App
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setIsLoading(true);
+        // Simulate "Preparing vibe" or wait for real event from YouTubePlayer
+        const timer = setTimeout(() => setIsLoading(false), 2500);
+        return () => clearTimeout(timer);
+    }, [track?.id]);
 
     if (!track) return null;
 
     return (
         <div className="right-panel glass-panel">
+            {isLoading && <PremiumLoader song={track.title} artist={track.artist} />}
+
             <div className="panel-header">
                 <h3>Now Playing</h3>
                 <div className="header-actions">
@@ -21,7 +30,7 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
             <div className="panel-content">
                 <div className="large-cover-wrapper">
                     {track.youtubeId || track.id ? (
-                        <div style={{ width: '100%', height: '100%' }}>
+                        <div style={{ width: '100%', height: '100%', pointerEvents: 'none' }}> {/* Non-interactive */}
                             <YouTubePlayer
                                 videoId={track.youtubeId || track.id}
                                 onPlayerReady={setPlayer}

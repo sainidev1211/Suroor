@@ -45,11 +45,15 @@ function App() {
       />
 
       {/* ALWAYS RENDER RIGHT PANEL IF SONG EXISTS */}
-      <div style={{ display: isRightPanelOpen && currentSong ? 'block' : 'none', height: '100%', position: 'absolute', right: 0, top: 0, zIndex: 50 }}>
+      <div style={{ display: currentSong ? 'block' : 'none', height: '100%', position: 'absolute', right: 0, top: 0, zIndex: 50 }}>
         <RightPanelPlayer
           track={currentSong}
           onClose={() => setIsRightPanelOpen(false)}
-          setPlayer={setPlayer} // Pass setter to capture player instance
+          setPlayer={setPlayer}
+          onVideoReady={() => {
+            // We could hide loader here if we had a precise event. 
+            // For now, we rely on the visual overlay fading or App state.
+          }}
         />
       </div>
 

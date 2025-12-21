@@ -9,21 +9,26 @@ export default function YouTubePlayer({ videoId, onPlayerReady }) {
         const player = {
             play() {
                 if (iframeRef.current && iframeRef.current.contentWindow) {
-                    console.log("YouTubePlayer: Sending play command");
-                    iframeRef.current.contentWindow.postMessage(
-                        '{"event":"command","func":"playVideo","args":""}',
-                        "*"
-                    );
+                    iframeRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', "*");
                 }
             },
             pause() {
                 if (iframeRef.current && iframeRef.current.contentWindow) {
-                    console.log("YouTubePlayer: Sending pause command");
-                    iframeRef.current.contentWindow.postMessage(
-                        '{"event":"command","func":"pauseVideo","args":""}',
-                        "*"
-                    );
+                    iframeRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', "*");
                 }
+            },
+            seekTo(seconds) {
+                if (iframeRef.current && iframeRef.current.contentWindow) {
+                    iframeRef.current.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'seekTo', args: [seconds, true] }), "*");
+                }
+            },
+            setVolume(vol) {
+                if (iframeRef.current && iframeRef.current.contentWindow) {
+                    iframeRef.current.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [vol] }), "*");
+                }
+            },
+            getDuration() {
+                return 0;
             }
         };
 
