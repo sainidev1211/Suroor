@@ -3,6 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { MainView } from './components/MainView';
 import { Player } from './components/Player';
 import { RightPanelPlayer } from './components/RightPanelPlayer';
+import PremiumLoader from './components/PremiumLoader';
 import { useLibrary } from './hooks/useLibrary';
 import './index.css';
 
@@ -13,6 +14,12 @@ function App() {
   // NEW STATE: Simple Song & Player
   const [currentSong, setCurrentSong] = useState(null);
   const [player, setPlayer] = useState(null);
+  const [isSystemReady, setIsSystemReady] = useState(false);
+
+  React.useEffect(() => {
+    // Simulate System Boot
+    setTimeout(() => setIsSystemReady(true), 2000);
+  }, []);
 
   const library = useLibrary();
 
@@ -29,6 +36,12 @@ function App() {
 
   return (
     <div className="app-container">
+      {!isSystemReady && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, background: 'black' }}>
+          <PremiumLoader song="Welcome to Suroor" artist="Loading System..." />
+        </div>
+      )}
+
       <Sidebar setView={setView} />
 
       <MainView
