@@ -15,11 +15,26 @@ function App() {
   const [currentSong, setCurrentSong] = useState(null);
   const [player, setPlayer] = useState(null);
   const [isSystemReady, setIsSystemReady] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
 
   React.useEffect(() => {
     // Simulate System Boot
     setTimeout(() => setIsSystemReady(true), 2000);
-  }, []);
+
+    // Detect First User Interaction
+    const unlockAutoplay = () => {
+      if (!hasUserInteracted) {
+        console.log("App: User Interaction Detected. Autoplay Unlocked.");
+        setHasUserInteracted(true);
+      }
+    };
+    window.addEventListener('click', unlockAutoplay);
+    window.addEventListener('keydown', unlockAutoplay);
+    return () => {
+      window.removeEventListener('click', unlockAutoplay);
+      window.removeEventListener('keydown', unlockAutoplay);
+    };
+  }, [hasUserInteracted]);
 
   const library = useLibrary();
 
@@ -63,6 +78,7 @@ function App() {
           track={currentSong}
           onClose={() => setIsRightPanelOpen(false)}
           setPlayer={setPlayer}
+          autoPlay={hasUserInteracted}
           onVideoReady={() => { }}
         />
       </div>

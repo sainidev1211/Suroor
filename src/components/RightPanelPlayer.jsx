@@ -3,15 +3,19 @@ import YouTubePlayer from "./YouTubePlayer";
 import PremiumLoader from "./PremiumLoader";
 import { FaTimes, FaEllipsisH } from 'react-icons/fa';
 
-export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, setPlayer, isOpen }) {
+export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPlaylist, setPlayer, isOpen, autoPlay }) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
-        // Simulate "Preparing vibe" or wait for real event from YouTubePlayer
-        const timer = setTimeout(() => setIsLoading(false), 2500);
-        return () => clearTimeout(timer);
     }, [track?.id]);
+
+    const handleStateChange = (state) => {
+        // State 1 = Playing, 3 = Buffering
+        if (state === 1) {
+            setIsLoading(false);
+        }
+    };
 
     if (!track) return null;
 
@@ -34,6 +38,8 @@ export function RightPanelPlayer({ track, onClose, toggleLike, isLiked, addToPla
                             <YouTubePlayer
                                 videoId={track.youtubeId || track.id}
                                 onPlayerReady={setPlayer}
+                                autoPlay={autoPlay}
+                                onStateChange={handleStateChange}
                             />
                         </div>
                     ) : (
