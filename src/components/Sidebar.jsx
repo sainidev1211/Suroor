@@ -12,6 +12,7 @@ export function Sidebar() {
         if (path === '/') return 'music';
         if (path === '/stories') return 'stories';
         if (path === '/library') return 'favorites';
+        if (path === '/ai') return 'ai';
         return '';
     };
 
@@ -21,10 +22,11 @@ export function Sidebar() {
         if (id === 'music') navigate('/');
         else if (id === 'stories') navigate('/stories');
         else if (id === 'favorites') navigate('/library');
+        else if (id === 'ai') navigate('/ai');
         else if (id === 'horror' || id === 'crime') navigate('/stories');
         else {
             console.log("Navigating to Placeholder:", id);
-            navigate('/'); // Fallback
+            // navigate('/'); // No fallback, keep user on page or show notice
         }
     };
 
